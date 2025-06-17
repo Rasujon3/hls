@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Live TV - BTV</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body>
+  <h2>BTV Live</h2>
+  <video id="video" width="640" height="360" controls autoplay></video>
+
+  <script>
+    const apiUrl = 'https://byte-capsule-2x.onrender.com/api/aynaott/sign?channel_id=btvhd';
+
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+        const video = document.getElementById('video');
+        const videoSrc = data.signed_url;
+
+        if (Hls.isSupported()) {
+          const hls = new Hls();
+          hls.loadSource(videoSrc);
+          hls.attachMedia(video);
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = videoSrc;
+        }
+      });
+  </script>
+</body>
+</html>
