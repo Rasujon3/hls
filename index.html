@@ -9,22 +9,29 @@
   <video id="video" width="640" height="360" controls autoplay></video>
 
   <script>
-    const apiUrl = 'https://byte-capsule-2x.onrender.com/api/aynaott/sign?channel_id=btvhd';
+    const apiUrl = 'https://raw.githubusercontent.com/byte-capsule/AynaOTT-Hls-Fetcher/main/AynaOTT_Hls_links_Static.Json';
+    console.log('apiUrl', apiUrl);
 
-    fetch(apiUrl)
-      .then(response => response.json())
-      .then(data => {
-        const video = document.getElementById('video');
-        const videoSrc = data.signed_url;
+   fetch(apiUrl)
+  .then(res => res.json())
+  .then(data => {
+    // console.log('data', data);
+    // console.log('data.channels', data.channels);
+    // console.log('data.channels', data.channels[0]);
+    console.log('data.channels', data.channels[0]?.link);
+    
+    const video = document.getElementById("video");
+    const hlsUrl = data.channels[0]?.link;
 
-        if (Hls.isSupported()) {
-          const hls = new Hls();
-          hls.loadSource(videoSrc);
-          hls.attachMedia(video);
-        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-          video.src = videoSrc;
-        }
-      });
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(hlsUrl);
+      hls.attachMedia(video);
+    } else {
+      video.src = hlsUrl;
+    }
+  });
+
   </script>
 </body>
 </html>
